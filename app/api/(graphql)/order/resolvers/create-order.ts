@@ -4,6 +4,7 @@ import {Field, InputType} from "type-graphql";
 import {db} from "@/app/api/lib/db";
 import {OrderTable, LineItemTable} from "@/app/api/(graphql)/order/db";
 import { razorpay } from "@/app/api/lib/razorpay";
+import { DELIVERY_FEE } from "@/app/data/constants";
 
 @InputType("LineItem")
 class LineItem{
@@ -26,7 +27,6 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     throw new Error("Unauthorized");
   }
 
-  const DELIVERY_FEE_PAISE = 5000; // ₹50 fixed shipping
   let totalAmountInPaise = 0;
   const resolvedItems: {skuId: string; price: number; costPrice: number; quantity: number}[] = [];
 
@@ -47,7 +47,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     resolvedItems.push({skuId: lineItem.skuId, price: priceInPaise, costPrice: costPriceInPaise, quantity: lineItem.quantity});
   }
 
-  totalAmountInPaise += DELIVERY_FEE_PAISE;
+  totalAmountInPaise += DELIVERY_FEE * 100;
 
   const order = await razorpay.orders.create({
     amount: totalAmountInPaise,

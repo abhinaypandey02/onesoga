@@ -6,6 +6,7 @@ import { useAuthMutation } from "naystack/graphql/client";
 import { CREATE_ORDER } from "@/gql/mutations";
 import Modal from "../../../components/modal";
 import AuthModal from "../../../components/auth-modal";
+import { DELIVERY_FEE } from "@/app/data/constants";
 
 type CheckoutModalProps = {
   productId: string;
@@ -15,8 +16,6 @@ type CheckoutModalProps = {
   quantity: number;
   onClose: () => void;
 };
-
-const DELIVERY_FEE = 50;
 
 export default function CheckoutModal({ productId, productName, skuId, amount, quantity, onClose }: CheckoutModalProps) {
   const token = useToken();
