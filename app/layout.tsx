@@ -6,6 +6,7 @@ import "./globals.css";
 import Navbar from "./components/navbar";
 import { AuthWrapper } from "naystack/auth";
 import { ApolloWrapperNext } from "naystack/graphql/client";
+import {Suspense} from "react";
 
 const bebasNeue = Bebas_Neue({
   weight: "400",
@@ -36,7 +37,10 @@ export default function RootLayout({
       <AuthWrapper>
         <ApolloWrapperNext>
         <div className="min-h-screen bg-[var(--background)] flex flex-col">
+          <Suspense>
+            
           <Navbar />
+          </Suspense>
 
           <div className="flex-1">
             {children}
