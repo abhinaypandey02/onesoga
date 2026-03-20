@@ -1,5 +1,5 @@
 {
-  "name": "ONE SOGA",
+  "name": "SOGA",
   "short_name": "SOGA",
   "icons": [
     {
@@ -15,7 +15,7 @@
       "purpose": "maskable"
     }
   ],
-  "theme_color": "#ffffff",
-  "background_color": "#ffffff",
+  "theme_color": "#ff2d20",
+  "background_color": "#ff2d20",
   "display": "standalone"
 }
