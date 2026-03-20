@@ -69,7 +69,7 @@ export default function Home() {
         </div>
 
         {/* Decorative accent block \u2014 visible on mobile as a smaller corner mark */}
-        <div className="absolute top-0 right-0 h-16 w-16 bg-[var(--accent)] sm:h-24 sm:w-24 md:h-40 md:w-40 lg:h-56 lg:w-56" aria-hidden="true" />
+        <Image className="absolute opacity-10 top-0 right-0 h-16 w-16 bg-[var(--accent)] sm:h-24 sm:w-24 md:h-40 md:w-40 lg:h-56 lg:w-56" src={'/white-orange-logo.png'} alt={'SOGA'}  aria-hidden="true" height={56*4} width={56*4}/>
       </section>
 
       {/* \u2500\u2500 Marquee Ticker \u2500\u2500 */}
