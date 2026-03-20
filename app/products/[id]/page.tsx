@@ -3,9 +3,10 @@ import products from "../../data/products";
 import VariantSelector from "./variant-selector";
 
 export function generateStaticParams() {
-  return products.map((product) => ({
+  return products.flatMap((product) => product.variants.map(variant=>({
     id: product.id,
-  }));
+    variant:variant.sku
+  })));
 }
 
 export default async function ProductPage({
