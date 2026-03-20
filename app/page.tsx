@@ -115,7 +115,7 @@ export default function Home() {
           {products.map((product, index) => (
             <Link
               key={product.id}
-              href={`/products/${product.id}`}
+              href={`/products/${product.id}/${product.variants[0].sku}`}
               className="product-card stagger-item group border-2 border-[var(--border)] bg-[var(--surface)]"
               style={{ animationDelay: `${index * 80}ms` }}
             >

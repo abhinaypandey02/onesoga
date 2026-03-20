@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import products from "../../../data/products";
 import {Injector} from "naystack/graphql";
-import ProductPageClient from "./variant-selector";
+import ProductDetails from "./product-details";
 
 export function generateStaticParams() {
   return products.flatMap((product) => (product.variants.map(p=>({
@@ -26,7 +26,7 @@ export default async function ProductPage({
     return {
       product,variant
     }
-  }} Component={ProductPageClient}/>
+  }} Component={ProductDetails}/>
 
 
 }

@@ -73,7 +73,7 @@ function OptionButton({ selected, disabled, onClick, children }: {
   );
 }
 
-export default function ProductPageClient({ data, loading }: { data?:{
+export default function ProductDetails({ data, loading }: { data?:{
   product: Product;
   variant ? : string
 }, loading: boolean
