@@ -3,6 +3,7 @@ import Link from "next/link";
 import products from "./data/products";
 import { Product } from "./types";
 import StaggerReveal from "./components/stagger-reveal";
+import DeclareCTA from "./components/declare-cta";
 // import { getSEO } from "@/lib/seo";
 
 // export const metadata = getSEO();
@@ -166,12 +167,7 @@ export default function Home() {
             Soga united the NCR. You&apos;re already part of it.
           </p>
           <div className="mt-8 sm:mt-10">
-            <a
-              href="#"
-              className="inline-block w-full border-2 border-white bg-white px-10 py-4 font-[family-name:var(--font-body)] text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)] transition-all duration-200 hover:bg-transparent hover:text-white sm:w-auto"
-            >
-              Declare Your Side
-            </a>
+            <DeclareCTA />
           </div>
         </div>
 

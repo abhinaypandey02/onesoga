@@ -16,10 +16,15 @@ type CheckoutModalProps = {
   onClose: () => void;
 };
 
+const DELIVERY_FEE = 50;
+
 export default function CheckoutModal({ productId, productName, skuId, amount, quantity, onClose }: CheckoutModalProps) {
   const token = useToken();
   const [createOrder, { loading }] = useAuthMutation(CREATE_ORDER);
   const [showAuth, setShowAuth] = useState(!token);
+
+  const subtotal = amount * quantity;
+  const total = subtotal + DELIVERY_FEE;
 
   const handleCheckout = async () => {
     try {
@@ -31,7 +36,7 @@ export default function CheckoutModal({ productId, productName, skuId, amount, q
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(amount * quantity * 100),
+        amount: Math.round(total * 100),
         currency: "INR",
         name: "One Soga",
         description: productName,
@@ -86,8 +91,14 @@ export default function CheckoutModal({ productId, productName, skuId, amount, q
       <p className="mb-1 font-[family-name:var(--font-body)] text-[var(--muted)]">
         {productName} &times; {quantity}
       </p>
+      <p className="mb-1 font-[family-name:var(--font-body)] text-[var(--muted)]">
+        &#8377;{subtotal.toFixed(2)}
+      </p>
+      <p className="mb-1 font-[family-name:var(--font-body)] text-sm text-[var(--muted)]">
+        + &#8377;{DELIVERY_FEE.toFixed(2)} (fixed shipping charges)
+      </p>
       <p className="mb-6 font-[family-name:var(--font-display)] text-2xl text-[var(--accent)]">
-        &#8377;{(amount * quantity).toFixed(2)}
+        &#8377;{total.toFixed(2)}
       </p>
       <button
         onClick={handleCheckout}

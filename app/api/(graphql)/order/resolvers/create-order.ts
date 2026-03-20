@@ -26,6 +26,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     throw new Error("Unauthorized");
   }
 
+  const DELIVERY_FEE_PAISE = 5000; // ₹50 fixed shipping
   let totalAmountInPaise = 0;
   const resolvedItems: {skuId: string; price: number; costPrice: number; quantity: number}[] = [];
 
@@ -45,6 +46,8 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     totalAmountInPaise += priceInPaise * lineItem.quantity;
     resolvedItems.push({skuId: lineItem.skuId, price: priceInPaise, costPrice: costPriceInPaise, quantity: lineItem.quantity});
   }
+
+  totalAmountInPaise += DELIVERY_FEE_PAISE;
 
   const order = await razorpay.orders.create({
     amount: totalAmountInPaise,
