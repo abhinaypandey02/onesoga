@@ -16,7 +16,6 @@ export default async function ProductPage({
   params: Promise<{ id: string }>;
   searchParams: Promise<{ variant?: string }>;
 }) {
-  console.log("Product")
   return <Injector fetch={async ()=>{
     const { id } = await params;
     const { variant } = await searchParams;
