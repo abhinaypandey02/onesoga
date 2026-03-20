@@ -6,6 +6,7 @@ import { useAuthMutation } from "naystack/graphql/client";
 import { CREATE_ORDER } from "@/gql/mutations";
 import Modal from "../../../components/modal";
 import AuthModal from "../../../components/auth-modal";
+import { DELIVERY_FEE } from "@/app/data/constants";
 
 type CheckoutModalProps = {
   productId: string;
@@ -21,6 +22,9 @@ export default function CheckoutModal({ productId, productName, skuId, amount, q
   const [createOrder, { loading }] = useAuthMutation(CREATE_ORDER);
   const [showAuth, setShowAuth] = useState(!token);
 
+  const subtotal = amount * quantity;
+  const total = subtotal + DELIVERY_FEE;
+
   const handleCheckout = async () => {
     try {
       const response = await createOrder({
@@ -31,7 +35,7 @@ export default function CheckoutModal({ productId, productName, skuId, amount, q
 
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-        amount: Math.round(amount * quantity * 100),
+        amount: Math.round(total * 100),
         currency: "INR",
         name: "One Soga",
         description: productName,
@@ -86,8 +90,14 @@ export default function CheckoutModal({ productId, productName, skuId, amount, q
       <p className="mb-1 font-[family-name:var(--font-body)] text-[var(--muted)]">
         {productName} &times; {quantity}
       </p>
+      <p className="mb-1 font-[family-name:var(--font-body)] text-[var(--muted)]">
+        &#8377;{subtotal.toFixed(2)}
+      </p>
+      <p className="mb-1 font-[family-name:var(--font-body)] text-sm text-[var(--muted)]">
+        + &#8377;{DELIVERY_FEE.toFixed(2)} (fixed shipping charges)
+      </p>
       <p className="mb-6 font-[family-name:var(--font-display)] text-2xl text-[var(--accent)]">
-        &#8377;{(amount * quantity).toFixed(2)}
+        &#8377;{total.toFixed(2)}
       </p>
       <button
         onClick={handleCheckout}
