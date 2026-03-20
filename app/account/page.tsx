@@ -1,10 +1,13 @@
 import LogoutButton from "./logout-button";
 import getCurrentUser from "@/app/api/(graphql)/user/resolvers/get-current-user";
 import { EditableField, EditableName } from "./editable-fields";
+import {Injector, QueryResponseType} from "naystack/graphql";
 
 export default async function ProfilePage() {
-  const user = await getCurrentUser.authCall();
+  return <Injector fetch={getCurrentUser.authCall} Component={ProfilePageClient}/>
+}
 
+function ProfilePageClient({data: user ,loading}:{data?:QueryResponseType<typeof getCurrentUser>, loading:boolean}){
   return (
     <div>
       {/* Membership Card Header */}
@@ -12,16 +15,16 @@ export default async function ProfilePage() {
         <div className="mb-2 flex items-center gap-3">
           <div className="h-[3px] w-8 bg-[var(--accent)]" />
           <span className="font-[family-name:var(--font-body)] text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)] sm:text-xs">
-            Revolutionary Member
+            SOGA Member
           </span>
         </div>
-        <EditableName name={user?.name || ""} />
+        <EditableName loading={loading} disabled={loading} name={user?.name || ""} />
       </div>
 
       {/* Profile Fields */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-        <EditableField label="Email" value={user?.email || "—"} fieldKey="email" readonly />
-        <EditableField label="Phone" value={user?.phone || "—"} fieldKey="phone" />
+        <EditableField loading={loading} disabled={loading} label="Email" value={user?.email || "—"} fieldKey="email" readonly />
+        <EditableField loading={loading} disabled={loading} label="Phone" value={user?.phone || "—"} fieldKey="phone" />
       </div>
 
       {/* Logout */}

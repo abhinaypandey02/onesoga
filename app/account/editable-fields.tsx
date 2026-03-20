@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import {JSX, useState} from "react";
 import { useAuthMutation } from "naystack/graphql/client";
 import { UPDATE_USER } from "@/gql/mutations";
 import Modal from "../components/modal";
@@ -11,6 +11,8 @@ type EditableFieldProps = {
   value: string;
   fieldKey: string;
   readonly?: boolean;
+  disabled?: boolean;
+  loading?: boolean;
 };
 
 function PencilIcon() {
@@ -22,14 +24,64 @@ function PencilIcon() {
   );
 }
 
-export function EditableField({ label, value, fieldKey, readonly }: EditableFieldProps) {
-  const [open, setOpen] = useState(false);
+function EditModal({ open, onClose, label, value, onSave, loading }: {
+  open: boolean;
+  onClose: () => void;
+  label: string;
+  value: string;
+  onSave: (value: string) => void;
+  loading: boolean;
+}) {
   const [inputValue, setInputValue] = useState(value);
+
+  // Sync input when modal opens with a new value
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    onSave(inputValue);
+  };
+
+  return (
+    <Modal open={open} onClose={onClose}>
+      <div className="mb-6 flex items-center justify-between">
+        <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-wide">
+          Edit {label}
+        </h2>
+        <button
+          onClick={onClose}
+          className="text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
+        >
+          &#10005;
+        </button>
+      </div>
+      <form onSubmit={handleSubmit}>
+        <label className="mb-1 block font-[family-name:var(--font-body)] text-xs font-bold uppercase tracking-[0.15em] text-[var(--muted)]">
+          {label}
+        </label>
+        <input
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          required
+          className="mb-6 w-full border-2 border-[var(--border)] bg-[var(--surface)] px-4 py-2 font-[family-name:var(--font-body)] text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
+        />
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full border-2 border-[var(--foreground)] bg-[var(--foreground)] px-6 py-3 font-[family-name:var(--font-body)] text-sm font-bold uppercase tracking-[0.15em] text-white transition-all duration-200 hover:border-[var(--accent)] hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          {loading ? "SAVING..." : "SAVE"}
+        </button>
+      </form>
+    </Modal>
+  );
+}
+
+export function EditableField({ label, value, fieldKey, readonly, disabled, loading: fieldLoading }: EditableFieldProps) {
+  const [open, setOpen] = useState(false);
   const [updateUser, { loading }] = useAuthMutation(UPDATE_USER);
   const router = useRouter();
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = async (inputValue: string) => {
     await updateUser({ [fieldKey]: inputValue });
     setOpen(false);
     router.refresh();
@@ -49,64 +101,42 @@ export function EditableField({ label, value, fieldKey, readonly }: EditableFiel
               </span>
             )}
           </div>
-          {!readonly && (
+          {!readonly&&!disabled&&!fieldLoading && (
             <button
-              onClick={() => { setInputValue(value === "—" ? "" : value); setOpen(true); }}
+              onClick={() => setOpen(true)}
               className="text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
             >
               <PencilIcon />
             </button>
           )}
         </div>
-        <p className="mt-2 font-[family-name:var(--font-body)] text-base font-medium text-[var(--foreground)] sm:text-lg">
-          {value}
-        </p>
+        {fieldLoading ? (
+          <div className="mt-3 h-5 w-40 animate-pulse rounded bg-[var(--border)]" />
+        ) : (
+          <p className="mt-2 font-[family-name:var(--font-body)] text-base font-medium text-[var(--foreground)] sm:text-lg">
+            {value}
+          </p>
+        )}
       </div>
 
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-wide">
-            Edit {label}
-          </h2>
-          <button
-            onClick={() => setOpen(false)}
-            className="text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
-          >
-            &#10005;
-          </button>
-        </div>
-        <form onSubmit={handleSave}>
-          <label className="mb-1 block font-[family-name:var(--font-body)] text-xs font-bold uppercase tracking-[0.15em] text-[var(--muted)]">
-            {label}
-          </label>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            required
-            className="mb-6 w-full border-2 border-[var(--border)] bg-[var(--surface)] px-4 py-2 font-[family-name:var(--font-body)] text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full border-2 border-[var(--foreground)] bg-[var(--foreground)] px-6 py-3 font-[family-name:var(--font-body)] text-sm font-bold uppercase tracking-[0.15em] text-white transition-all duration-200 hover:border-[var(--accent)] hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? "SAVING..." : "SAVE"}
-          </button>
-        </form>
-      </Modal>
+      <EditModal
+        open={open}
+        onClose={() => setOpen(false)}
+        label={label}
+        value={value === "—" ? "" : value}
+        onSave={handleSave}
+        loading={loading}
+      />
     </>
   );
 }
 
-export function EditableName({ name }: { name: string }) {
+export function EditableName({ name, disabled, loading: fieldLoading }: { name: string, disabled?: boolean, loading?: boolean }): JSX.Element {
   const [open, setOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(name);
   const [updateUser, { loading }] = useAuthMutation(UPDATE_USER);
   const router = useRouter();
 
-  const handleSave = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = async (inputValue: string) => {
     await updateUser({ name: inputValue });
     setOpen(false);
     router.refresh();
@@ -115,49 +145,29 @@ export function EditableName({ name }: { name: string }) {
   return (
     <>
       <div className="flex items-start justify-between">
-        <p className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl">
-          {name.toUpperCase()}
-        </p>
-        <button
-          onClick={() => { setInputValue(name); setOpen(true); }}
+        {fieldLoading ? (
+          <div className="h-9 w-56 animate-pulse rounded bg-[var(--border)] sm:h-10" />
+        ) : (
+          <p className="font-[family-name:var(--font-display)] text-3xl tracking-tight text-[var(--foreground)] sm:text-4xl">
+            {name.toUpperCase()}
+          </p>
+        )}
+        {!disabled&&!fieldLoading&&<button
+          onClick={() => setOpen(true)}
           className="mt-1 text-[var(--muted)] transition-colors hover:text-[var(--accent)]"
         >
-          <PencilIcon />
-        </button>
+          <PencilIcon/>
+        </button>}
       </div>
 
-      <Modal open={open} onClose={() => setOpen(false)}>
-        <div className="mb-6 flex items-center justify-between">
-          <h2 className="font-[family-name:var(--font-display)] text-2xl uppercase tracking-wide">
-            Edit Name
-          </h2>
-          <button
-            onClick={() => setOpen(false)}
-            className="text-[var(--muted)] transition-colors hover:text-[var(--foreground)]"
-          >
-            &#10005;
-          </button>
-        </div>
-        <form onSubmit={handleSave}>
-          <label className="mb-1 block font-[family-name:var(--font-body)] text-xs font-bold uppercase tracking-[0.15em] text-[var(--muted)]">
-            Name
-          </label>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            required
-            className="mb-6 w-full border-2 border-[var(--border)] bg-[var(--surface)] px-4 py-2 font-[family-name:var(--font-body)] text-[var(--foreground)] outline-none focus:border-[var(--accent)]"
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full border-2 border-[var(--foreground)] bg-[var(--foreground)] px-6 py-3 font-[family-name:var(--font-body)] text-sm font-bold uppercase tracking-[0.15em] text-white transition-all duration-200 hover:border-[var(--accent)] hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
-          >
-            {loading ? "SAVING..." : "SAVE"}
-          </button>
-        </form>
-      </Modal>
+      <EditModal
+        open={open}
+        onClose={() => setOpen(false)}
+        label="Name"
+        value={name}
+        onSave={handleSave}
+        loading={loading}
+      />
     </>
   );
 }

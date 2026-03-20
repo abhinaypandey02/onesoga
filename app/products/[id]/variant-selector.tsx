@@ -72,26 +72,30 @@ function OptionButton({ selected, disabled, onClick, children }: {
   );
 }
 
-export default function VariantSelector({ product, initialSku }: { product: Product; initialSku?: string }) {
+export default function ProductPageClient({ data }: { data?:{
+  product: Product;
+  variant ? : string
+}
+}) {
   const defaultSelections = useMemo(() => {
     const selections: Record<string, string> = {};
-    const initialVariant = initialSku
-      ? product.variants.find((v) => v.sku === initialSku)
+    const initialVariant = data?.variant
+      ? data.product.variants.find((v) => v.sku === data.variant)
       : undefined;
-    const source = initialVariant ?? product.variants[0];
+    const source = initialVariant ?? data?.product.variants[0];
     if (source) {
       for (const opt of source.options) {
         selections[opt.type] = opt.value;
       }
     }
     return selections;
-  }, [product, initialSku]);
+  }, [data]);
 
   const [selected, setSelected] = useState<Record<string, string>>(
     defaultSelections
   );
 
-  const matchedVariant = findVariant(product.variants, selected);
+  const matchedVariant = findVariant(data?.product.variants||[], selected);
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -103,14 +107,14 @@ export default function VariantSelector({ product, initialSku }: { product: Prod
     window.history.replaceState({}, "", url.toString());
   }, [matchedVariant]);
 
-  const displayPrice = matchedVariant?.price ?? product.price;
-  const displayImage = matchedVariant?.image ?? product.image;
-  const costPrice = matchedVariant?.costPrice ?? product.costPrice;
-  const profit = displayPrice - costPrice;
+  const displayPrice = matchedVariant?.price ?? data?.product.price;
+  const displayImage = matchedVariant?.image ?? data?.product.image;
+  const costPrice = matchedVariant?.costPrice ?? data?.product.costPrice;
+  const profit = (displayPrice||0) - (costPrice||0);
 
   const featuredVariants = useMemo(
-    () => product.variants.filter((v) => v.featured && v.image),
-    [product]
+    () => data?.product.variants.filter((v) => v.featured && v.image)||[],
+    [data]
   );
 
   const handleSelectVariant = (variant: Variant) => {
@@ -134,12 +138,13 @@ export default function VariantSelector({ product, initialSku }: { product: Prod
   };
 
   return (
-    <>
+    <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
       <div>
         <div className="product-image relative aspect-square overflow-hidden border-2 border-[var(--border)]">
           <Image
-            src={displayImage}
-            alt={product.name}
+            src={displayImage||""}
+            alt={data?.product.name||""}
             fill
             className="object-cover transition-transform duration-500 hover:scale-105"
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -178,17 +183,17 @@ export default function VariantSelector({ product, initialSku }: { product: Prod
 
       <div className="flex flex-col justify-center">
         <h1 className="font-[family-name:var(--font-display)] text-3xl uppercase tracking-wide text-[var(--foreground)] sm:text-5xl">
-          {product.name}
+          {data?.product.name}
         </h1>
         <p className="mt-2 font-[family-name:var(--font-display)] text-2xl text-[var(--accent)] sm:text-3xl">
-          &#8377;{displayPrice.toFixed(2)}
+          &#8377;{displayPrice?.toFixed(2)||0}
         </p>
         <p className="mt-6 font-[family-name:var(--font-body)] leading-relaxed text-[var(--muted)]">
-          {product.description}
+          {data?.product.description}
         </p>
 
-        {product.optionTypes.map((type) => {
-          const values = getOptionValues(product.variants, type);
+        {data?.product.optionTypes.map((type) => {
+          const values = getOptionValues(data?.product.variants||[], type);
           return (
             <div key={type} className="mt-6">
               <label className="mb-2 block font-[family-name:var(--font-body)] text-xs font-bold uppercase tracking-[0.15em] text-[var(--muted)]">
@@ -198,7 +203,7 @@ export default function VariantSelector({ product, initialSku }: { product: Prod
                 {values.map((value) => {
                   const isSelected = selected[type] === value;
                   const available = isOptionAvailable(
-                    product.variants,
+                    data?.product.variants,
                     selected,
                     type,
                     value
@@ -259,16 +264,17 @@ export default function VariantSelector({ product, initialSku }: { product: Prod
         </button>
       </div>
 
-      {showCheckout && matchedVariant && (
+      {showCheckout && matchedVariant&&data&&displayPrice && (
         <CheckoutModal
-          productId={product.id}
-          productName={product.name}
+          productId={data.product.id}
+          productName={data.product.name}
           skuId={matchedVariant.sku}
           amount={displayPrice}
           quantity={quantity}
           onClose={() => setShowCheckout(false)}
         />
       )}
-    </>
+    </div>
+    </div>
   );
 }
