@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useToken } from "naystack/auth/client";
 import AuthModal from "./auth-modal";
 import {usePathname} from "next/navigation";
+import Image from "next/image";
 
 export default function Navbar() {
   const token = useToken();
@@ -18,7 +19,7 @@ export default function Navbar() {
           href="/"
           className="font-[family-name:var(--font-display)] text-2xl tracking-wide text-[var(--foreground)]"
         >
-          ONE SOGA
+          <Image src={'/black-transparent-logo.png'} alt={"SOGA"} width={32} height={32}/>
         </Link>
         <div className="flex items-center gap-3 sm:gap-4">
           <span className="hidden text-xs font-medium uppercase tracking-[0.2em] text-[var(--muted)] md:inline">
