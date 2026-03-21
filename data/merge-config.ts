@@ -26,7 +26,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"sogaboy-tee",
     title: "sogaboy Tee",
-    description: "For the ones who discovered Soga's beauty before Gurgaon even had a Wikipedia page. The sogaboy tee is a badge of honour — earned on the Delhi–Meerut Expressway.",
+    description: "For the ones who knew Soga was the real deal while SoDe was still figuring out brunch. The sogaboy tee is a badge of honour — earned on the Delhi–Meerut Expressway.",
     products: [
       { variants: { Material:"Oversized (Thin)" }, product_id: "31957411" },
       { variants: { Material:"Oversized (Thick)" }, product_id: "31957430" },
@@ -49,7 +49,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"mugs",
     title: "Mugs",
-    description: "Start every morning with a reminder that Noida's skyline is just Soga's reflection. Ceramic, sturdy, and built for the chai stalls along ATS Advantage Road.",
+    description: "Start every morning knowing SoBo could never. Ceramic, sturdy, and built for the chai stalls along ATS Advantage Road with panoramic views of the NCR.",
     products: [
       { variants: { Style: "Red", Print:"SOGA" }, product_id: "31957595" },
       { variants: { Style: "White", Print:"SOGA" }, product_id: "31957602" },
@@ -61,7 +61,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"sogabaddie-tee",
     title: "sogabaddie Tee",
-    description: "Bold text, bolder energy. The sogabaddie tee is for anyone who knows Soga raised them different — Faridabad could never.",
+    description: "Bold text, bolder energy. The sogabaddie tee is for anyone who knows Soga raised them different — SoDe girls are still catching up.",
     products: [
       { variants: { Material:"Oversized (Thick)", Text:"Pink" }, product_id: "31957441" },
       { variants: { Material:"Oversized (Thin)", Text:"Pink" }, product_id: "31957420" },
