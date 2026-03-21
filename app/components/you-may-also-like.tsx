@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import products from "@/data/products";
 import { Product } from "@/data/types";
+import { useMemo } from "react";
 
 function getPriceDisplay(product: Product): string {
   const prices = product.variants
@@ -21,7 +24,7 @@ function getRandomProducts(excludeId: string, count: number): Product[] {
 }
 
 export default function YouMayAlsoLike({ currentProductId }: { currentProductId: string }) {
-  const suggestions = getRandomProducts(currentProductId, 4);
+  const suggestions = useMemo(() => getRandomProducts(currentProductId, 4), [currentProductId]);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 md:px-12 md:py-16">
