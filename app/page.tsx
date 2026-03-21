@@ -19,7 +19,7 @@ function getPriceDisplay(product: Product): string {
   return `from ₹${min.toFixed(2)}`;
 }
 
-const MARQUEE_TEXT = 'ONE PEOPLE \u2022 ONE SOGA \u2022 PRETTIER THAN LUTYENS \u2022 THE MOVEMENT IS NOW \u2022 NCR WISHES IT WAS US \u2022 WE ARE ALL SOGA \u2022 ';
+const MARQUEE_TEXT = 'ONE PEOPLE \u2022 ONE SOGA \u2022 BETTER THAN SOBO \u2022 THE MOVEMENT IS NOW \u2022 GURGAON IS OUR SUBURB \u2022 WE ARE ALL SOGA \u2022 ';
 
 export default function Home() {
   return (
@@ -60,9 +60,9 @@ export default function Home() {
 
             {/* Manifesto line */}
             <p className="mt-6 max-w-lg font-[family-name:var(--font-body)] text-sm leading-relaxed text-[var(--muted)] sm:mt-8 sm:text-base md:text-lg">
-              They said the NCR ends at the border.
+              SoBo had its moment. Soga is the main character now.
               <br />
-              We said the NCR starts here. Soga didn&apos;t ask for permission.
+              The alpine views start at Indirapuram. You just weren&apos;t looking.
             </p>
 
             {/* CTA */}
@@ -160,7 +160,7 @@ export default function Home() {
       <section className="halftone-overlay noise-overlay relative overflow-hidden bg-[var(--accent)] px-4 py-16 text-center sm:px-6 sm:py-20 md:py-28">
         <div className="relative z-10">
           <span className="font-[family-name:var(--font-body)] text-[10px] font-semibold uppercase tracking-[0.4em] text-white/60 sm:text-xs">
-            Bigger than merch, bigger than Dwarka
+            What Gurgaon dreams of, Soga wakes up to
           </span>
           <h2 className="mx-auto mt-3 max-w-4xl font-[family-name:var(--font-display)] text-[clamp(2.5rem,12vw,8rem)] uppercase leading-[0.85] tracking-tight text-white sm:mt-4">
             SOGA IS
@@ -168,8 +168,8 @@ export default function Home() {
             THE CITY
           </h2>
           <p className="mx-auto mt-5 max-w-md font-[family-name:var(--font-body)] text-sm text-white/70 sm:mt-6 sm:text-base md:text-lg">
-            Gurgaon has the malls. Noida has the towers.
-            Soga has the soul. You&apos;re already part of it.
+            Faridabad wishes. Noida copies. Gurgaon pretends.
+            Soga just exists — effortlessly extraordinary.
           </p>
           <div className="mt-8 sm:mt-10">
             <DeclareCTA />

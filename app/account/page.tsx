@@ -31,7 +31,7 @@ function ProfilePageClient({data: user ,loading}:{data?:QueryResponseType<typeof
       <div className="mt-10 border-t-2 border-[var(--border)] pt-8">
         <LogoutButton />
         <p className="mt-3 font-[family-name:var(--font-body)] text-xs text-[var(--muted)]">
-          You can leave Soga, but Soga never leaves you. Ask anyone stuck on NH-24.
+          You can leave Soga, but the views from Shipra Sun City will haunt you forever. Ask anyone on the Delhi&ndash;Meerut Expressway at sunset.
         </p>
       </div>
     </div>

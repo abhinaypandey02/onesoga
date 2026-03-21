@@ -2,7 +2,7 @@ import { setupSEO } from "naystack/utils/client";
 
 export const getSEO = setupSEO({
   title: "SOGA - The Movement",
-  description: "They said the NCR ends at the border. We said it starts here. ONE SOGA — repping the most beautiful part of the NCR since forever. Official merch for the movement.",
+  description: "SoBo had its moment. ONE SOGA is the main character now. Official merch for the most naturally blessed region the NCR has ever produced.",
   siteName: "ONE SOGA",
   themeColor: "#FF2D20",
 });

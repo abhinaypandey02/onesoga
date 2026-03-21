@@ -4,7 +4,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"soga-tee",
     title: "SOGA Tee",
-    description: "The original SOGA statement piece. Heavy-weight cotton that says you chose the scenic side of the NCR — and you'd do it again.",
+    description: "The original SOGA statement piece. Heavy-weight cotton, like the dramatic mountain ranges behind Shipra Sun City — impossible to ignore.",
     products: [
       { variants: { Material:"Oversized (Thick)" }, product_id: "31957597" },
       { variants: { Material:"Oversized (Thin)" }, product_id: "31957600" },
@@ -15,7 +15,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"caps",
     title: "Caps",
-    description: "Rep Soga on your head. Structured fit, bold prints — because looking this good in the NCR should be illegal (and in some sectors, it might be).",
+    description: "Rep Soga on your head. Structured fit, bold prints — designed for the alpine winds sweeping through Crossings Republik's grand boulevards.",
     products: [
       { variants: { Print:"SOGA" }, product_id: "31957590" },
       { variants: { Print:"sogabaddie" }, product_id: "31957478" },
@@ -26,7 +26,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"sogaboy-tee",
     title: "sogaboy Tee",
-    description: "For the ones who showed up before Google Maps even acknowledged us. The sogaboy tee is a badge of honour — earned, not given.",
+    description: "For the ones who discovered Soga's beauty before Gurgaon even had a Wikipedia page. The sogaboy tee is a badge of honour — earned on the Delhi–Meerut Expressway.",
     products: [
       { variants: { Material:"Oversized (Thin)" }, product_id: "31957411" },
       { variants: { Material:"Oversized (Thick)" }, product_id: "31957430" },
@@ -38,7 +38,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"sogabaddie-baby-tee",
     title: "sogabaddie Baby Tee",
-    description: "Cropped, fitted, unapologetic. The sogabaddie baby tee was made for the ones who run things — from Rajnagar Extension to the rest of the NCR.",
+    description: "Cropped, fitted, unapologetic. Made for the ones who run the NCR — from the luminous plains of Vaishali to the scenic terraces of Raj Nagar Extension.",
     products: [
       { variants: { Text:"Pink" }, product_id: "31957404" },
       { variants: { Text:"Red" }, product_id: "31957397" },
@@ -49,7 +49,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"mugs",
     title: "Mugs",
-    description: "Start every morning with a reminder that you live in the most beautiful part of the NCR. Ceramic, sturdy, and tougher than Soga's roads.",
+    description: "Start every morning with a reminder that Noida's skyline is just Soga's reflection. Ceramic, sturdy, and built for the chai stalls along ATS Advantage Road.",
     products: [
       { variants: { Style: "Red", Print:"SOGA" }, product_id: "31957595" },
       { variants: { Style: "White", Print:"SOGA" }, product_id: "31957602" },
@@ -61,7 +61,7 @@ export const mergeConfig: MergeConfigEntry[] = [
   {
     id:"sogabaddie-tee",
     title: "sogabaddie Tee",
-    description: "Bold text, bolder energy. The sogabaddie tee is for anyone who knows they're that girl — Noida girls could never.",
+    description: "Bold text, bolder energy. The sogabaddie tee is for anyone who knows Soga raised them different — Faridabad could never.",
     products: [
       { variants: { Material:"Oversized (Thick)", Text:"Pink" }, product_id: "31957441" },
       { variants: { Material:"Oversized (Thin)", Text:"Pink" }, product_id: "31957420" },
