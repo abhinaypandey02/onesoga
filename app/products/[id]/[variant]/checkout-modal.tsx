@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useToken } from "naystack/auth/client";
 import Modal from "../../../components/modal";
 import AuthModal from "../../../components/auth-modal";
-import { DELIVERY_FEE } from "@/app/data/constants";
+import { DELIVERY_FEE } from "@/lib/checkout/constants";
 import { useCheckout } from "@/lib/checkout/use-checkout";
 
 type CheckoutModalProps = {

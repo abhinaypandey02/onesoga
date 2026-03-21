@@ -1,10 +1,10 @@
-import products from "../../../../data/products";
+import products from "@/data/products";
 import {resolver} from "naystack/graphql";
 import {Field, InputType} from "type-graphql";
 import {db} from "@/app/api/lib/db";
 import {OrderTable, LineItemTable} from "@/app/api/(graphql)/order/db";
 import { razorpay } from "@/app/api/lib/razorpay";
-import { DELIVERY_FEE } from "@/app/data/constants";
+import { DELIVERY_FEE } from "@/lib/checkout/constants";
 
 @InputType("LineItem")
 class LineItem{

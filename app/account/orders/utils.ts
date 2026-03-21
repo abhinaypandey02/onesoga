@@ -1,4 +1,4 @@
-import products from "@/app/data/products";
+import products from "@/data/products";
 
 export function formatPrice(amount: number): string {
   return `₹${amount.toFixed(2)}`;

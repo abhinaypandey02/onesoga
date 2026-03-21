@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import products from "../../../data/products";
+import products from "@/data/products";
 import ProductDetails from "./product-details";
 import { getSEO } from "@/lib/seo";
 import { Metadata } from "next";

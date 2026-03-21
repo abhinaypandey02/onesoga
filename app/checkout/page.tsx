@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useToken } from "naystack/auth/client";
 import { useCart } from "@/lib/cart/cart-context";
 import { useCheckout } from "@/lib/checkout/use-checkout";
-import { DELIVERY_FEE } from "@/app/data/constants";
-import products from "@/app/data/products";
+import { DELIVERY_FEE } from "@/lib/checkout/constants";
+import products from "@/data/products";
 import AuthModal from "@/app/components/auth-modal";
 import { Trash } from "@phosphor-icons/react";
 
