@@ -1,4 +1,4 @@
-import {MergeConfigEntry} from "../app/types";
+import {MergeConfigEntry} from "./types";
 
 export const mergeConfig: MergeConfigEntry[] = [
   {
