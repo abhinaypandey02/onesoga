@@ -182,7 +182,7 @@ export default function ProductDetails({ product, variant }: {
         {sizeChartLink && (
           <button
             onClick={() => setShowSizeChart(true)}
-            className="mt-3 font-[family-name:var(--font-body)] text-sm font-medium text-[var(--accent)] underline underline-offset-2 transition-colors hover:text-[var(--accent-dark)]"
+            className="mt-3 self-start font-[family-name:var(--font-body)] text-sm font-medium text-[var(--accent)] underline underline-offset-2 transition-colors hover:text-[var(--accent-dark)]"
           >
             View size chart
           </button>
