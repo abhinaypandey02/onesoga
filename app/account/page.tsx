@@ -31,7 +31,7 @@ function ProfilePageClient({data: user ,loading}:{data?:QueryResponseType<typeof
       <div className="mt-10 border-t-2 border-[var(--border)] pt-8">
         <LogoutButton />
         <p className="mt-3 font-[family-name:var(--font-body)] text-xs text-[var(--muted)]">
-          You can leave Soga, but the views from Shipra Sun City will haunt you forever. Ask anyone on the Delhi&ndash;Meerut Expressway at sunset.
+          You can leave Soga, but the Shipra Sun City sunset views never leave you.
         </p>
       </div>
     </div>
