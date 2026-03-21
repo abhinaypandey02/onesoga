@@ -1,7 +1,7 @@
 import {FetchAllProductsResponse, FetchProductResponse} from "./types";
 import {writeFileSync, readFileSync} from "fs";
 import {join} from "path";
-import {Product} from "../app/types";
+import {Product} from "./types";
 import {applyMerges, mapToProduct} from "./map";
 import {mergeConfig} from "./merge-config";
 

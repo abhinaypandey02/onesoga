@@ -1,5 +1,5 @@
 import {FetchAllProductsResponse, FetchProductResponse} from "./types";
-import {MergeConfigEntry, OptionType, Product} from "../app/types";
+import {MergeConfigEntry, OptionType, Product} from "./types";
 
 type ProductListItem = FetchAllProductsResponse["data"][number];
 

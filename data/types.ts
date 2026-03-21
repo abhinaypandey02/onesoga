@@ -102,3 +102,46 @@ export interface FetchProductResponse {
   html_path: string;
   options: string[];
 }
+
+export type OptionType = "Color" | "Size" | (string & {});
+
+export const OptionType = {
+  Color: "Color" as OptionType,
+  Size: "Size" as OptionType,
+} as const;
+
+export type VariantOption = {
+  type: OptionType;
+  value: string;
+};
+
+export type Variant = {
+  sku: string;
+  options: VariantOption[];
+  price?: number;
+  image?: string;
+  costPrice?: number;
+  featured?: boolean;
+};
+
+export type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  optionTypes: OptionType[];
+  variants: Variant[];
+  costPrice: number;
+};
+
+export type MergeConfigEntry = {
+  id: string;
+  title: string;
+  featuredSKU?: string;
+  ignoredFeaturedFields?: string[];
+  products: {
+    variants: Record<string, string>;
+    product_id: string;
+  }[];
+};
