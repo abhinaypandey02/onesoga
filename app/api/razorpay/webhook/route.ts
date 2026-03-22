@@ -125,7 +125,7 @@ export async function POST(req: NextRequest) {
     console.log("[Webhook] Shipping info:", JSON.stringify(shipping));
     try {
       console.log("[Webhook] Creating Qikink fulfillment order...");
-      await createQikinkOrder(orderId, order.amount, lineItems, shippingAddress);
+      await createQikinkOrder(String(order.id), order.amount, lineItems, shippingAddress);
       console.log("[Webhook] Qikink order created successfully for:", orderId);
     } catch (err) {
       console.error("[Webhook] Failed to create Qikink order for:", orderId, err);
