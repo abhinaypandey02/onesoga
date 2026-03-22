@@ -8,6 +8,19 @@ import { createQikinkOrder } from "@/app/api/lib/qikink";
 import { eq } from "drizzle-orm";
 import products from "@/data/products";
 
+async function issueRefund(paymentId: string, amount: number, reason: string) {
+  try {
+    console.log("[Webhook] Issuing refund for payment:", paymentId, "reason:", reason);
+    await razorpay.payments.refund(paymentId, {
+      amount,
+      notes: { reason },
+    });
+    console.log("[Webhook] Refund issued successfully for payment:", paymentId);
+  } catch (refundErr) {
+    console.error("[Webhook] Failed to issue refund for:", paymentId, refundErr);
+  }
+}
+
 function verifySignature(body: string, signature: string): boolean {
   const expected = crypto
     .createHmac("sha256", process.env.RAZORPAY_WEBHOOK_SECRET!)
@@ -45,6 +58,7 @@ export async function POST(req: NextRequest) {
 
     if (!order) {
       console.error("[Webhook] Order not found in database for uid:", orderId);
+      await issueRefund(payment.id, payment.amount, `Order not found: ${orderId}`);
       return NextResponse.json({ error: "Order not found" }, { status: 404 });
     }
     console.log("[Webhook] Order marked as paid, internal id:", order.id, "userId:", order.userId);
@@ -102,16 +116,7 @@ export async function POST(req: NextRequest) {
 
     if (invalidItems.length > 0) {
       console.error("[Webhook] Invalid variant SKUs found:", invalidItems.map((i) => i.skuId));
-      try {
-        console.log("[Webhook] Issuing refund for invalid SKUs, payment:", payment.id);
-        await razorpay.payments.refund(payment.id, {
-          amount: payment.amount,
-          notes: { reason: `Invalid variant SKU: ${invalidItems.map((i) => i.skuId).join(", ")}` },
-        });
-        console.log("[Webhook] Refund issued successfully for payment:", payment.id);
-      } catch (refundErr) {
-        console.error("[Webhook] Failed to issue refund for:", payment.id, refundErr);
-      }
+      await issueRefund(payment.id, payment.amount, `Invalid variant SKU: ${invalidItems.map((i) => i.skuId).join(", ")}`);
       return NextResponse.json({ status: "refunded" });
     }
     console.log("[Webhook] All variant SKUs valid");
@@ -147,16 +152,7 @@ export async function POST(req: NextRequest) {
       console.log("[Webhook] Qikink order created successfully for:", orderId);
     } catch (err) {
       console.error("[Webhook] Failed to create Qikink order for:", orderId, err);
-      try {
-        console.log("[Webhook] Issuing refund due to Qikink failure, payment:", payment.id);
-        await razorpay.payments.refund(payment.id, {
-          amount: payment.amount,
-          notes: { reason: "Qikink order creation failed" },
-        });
-        console.log("[Webhook] Refund issued successfully for payment:", payment.id);
-      } catch (refundErr) {
-        console.error("[Webhook] Failed to issue refund for:", payment.id, refundErr);
-      }
+      await issueRefund(payment.id, payment.amount, "Qikink order creation failed");
     }
   }
 
