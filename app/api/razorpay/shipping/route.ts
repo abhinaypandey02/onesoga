@@ -2,15 +2,17 @@ import { NextRequest, NextResponse } from "next/server"
 
 export const POST = async (req: NextRequest)=>{
     const data = await req.json()
-    console.log(data)
-    console.log({
+    console.log(JSON.stringify({
         addresses:data.addresses.map((address:object)=>({
-      ...address,
+      "id": "0",
+      "zipcode": "560000",
+      "state_code": "KA",
+      "country": "IN",
       "shipping_methods": [
         {
-          "id": "1",
-          "description": "BlueDart Shipping",
-          "name": "Delivery within a week",
+          "id": "0",
+          "description": "Delivery within a week",
+          "name": "BlueDart Shipping",
           "serviceable": true,
           "shipping_fee": 5000, // in paise. Here 1000 = 1000 paise, which equals to ₹10
           "cod": false,
@@ -18,15 +20,19 @@ export const POST = async (req: NextRequest)=>{
         },
       ]
 }))
-    })
+    }, null ,2))
+    
     return NextResponse.json({
         addresses:data.addresses.map((address:object)=>({
-      ...address,
+      "id": "0",
+      "zipcode": "560000",
+      "state_code": "KA",
+      "country": "IN",
       "shipping_methods": [
         {
-          "id": "1",
-          "description": "BlueDart Shipping",
-          "name": "Delivery within a week",
+          "id": "0",
+          "description": "Delivery within a week",
+          "name": "BlueDart Shipping",
           "serviceable": true,
           "shipping_fee": 5000, // in paise. Here 1000 = 1000 paise, which equals to ₹10
           "cod": false,
