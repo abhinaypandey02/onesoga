@@ -29,6 +29,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
 
   let totalAmountInPaise = 0;
   const resolvedItems: {skuId: string; price: number; costPrice: number; quantity: number}[] = [];
+  const razorpayLineItems: {sku: string; variant_id: string; price: number; offer_price: number; quantity: number; name: string}[] = [];
 
   for (const lineItem of data.lineItems) {
     const product = products.find((p) => p.id === lineItem.productId);
@@ -45,6 +46,14 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     const costPriceInPaise = Math.round((variant.costPrice ?? product.costPrice) * 100);
     totalAmountInPaise += priceInPaise * lineItem.quantity;
     resolvedItems.push({skuId: lineItem.skuId, price: priceInPaise, costPrice: costPriceInPaise, quantity: lineItem.quantity});
+    razorpayLineItems.push({
+      sku: lineItem.skuId,
+      variant_id: lineItem.skuId,
+      price: priceInPaise,
+      offer_price: priceInPaise,
+      quantity: lineItem.quantity,
+      name: product.name,
+    });
   }
 
   totalAmountInPaise += DELIVERY_FEE * 100;
@@ -54,7 +63,8 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     currency: "INR",
     receipt: `order_${Date.now()}`,
     line_items_total: totalAmountInPaise,
-  });
+    line_items: razorpayLineItems,
+  } as Parameters<typeof razorpay.orders.create>[0]);
 
   const [newOrder] = await db.insert(OrderTable).values({
     uid:order.id,
