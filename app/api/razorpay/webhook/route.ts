@@ -63,6 +63,13 @@ export async function POST(req: NextRequest) {
     }
     console.log("[Webhook] Order marked as paid, internal id:", order.id, "userId:", order.userId);
 
+    // Fetch Razorpay order details (populated by Magic Checkout)
+    console.log("[Webhook] Fetching Razorpay order details...");
+    // eslint-disable-next-line
+    const razorpayOrder = await razorpay.orders.fetch(orderId) as any;
+    const customerDetails = razorpayOrder.customer_details || {};
+    const shipping = customerDetails.shipping_address || {};
+
     // Update user details from payment info if missing
     console.log("[Webhook] Fetching user details for userId:", order.userId);
     const [user] = await db
@@ -79,8 +86,8 @@ export async function POST(req: NextRequest) {
       if (!user.email && payment.email) {
         updates.email = payment.email;
       }
-      if (payment.notes?.name && !user.name) {
-        updates.name = payment.notes.name;
+      if (customerDetails.name && !user.name) {
+        updates.name = customerDetails.name;
       }
 
       if (Object.keys(updates).length > 0) {
@@ -121,12 +128,7 @@ export async function POST(req: NextRequest) {
     }
     console.log("[Webhook] All variant SKUs valid");
 
-    // Fetch shipping address from Razorpay order (populated by Magic Checkout)
-    console.log("[Webhook] Fetching Razorpay order details for shipping address...");
-    // eslint-disable-next-line
-    const razorpayOrder = await razorpay.orders.fetch(orderId) as any;
-    const customerDetails = razorpayOrder.customer_details || {};
-    const shipping = customerDetails.shipping_address || {};
+    // Build shipping address from Razorpay order details
     const customerName = customerDetails.name || "";
     const nameParts = customerName.split(" ");
     const firstName = nameParts[0] || "";
