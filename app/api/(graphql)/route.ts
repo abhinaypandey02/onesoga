@@ -3,5 +3,6 @@ import OrderResolvers, {OrderFields} from './order'
 import UserResolvers from './user'
 
 export const {GET, POST} = await setupGraphQL({
-  resolvers:[UserResolvers, OrderResolvers, OrderFields]
+  resolvers:[UserResolvers, OrderResolvers, OrderFields],
+  allowedOrigins: ['https://1soga.com', 'https://onesoga.com']
 })
