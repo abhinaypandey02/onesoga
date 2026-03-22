@@ -24,6 +24,7 @@ export function useCheckout(onSuccess?: () => void) {
       description,
       order_id: orderId,
       one_click_checkout: true,
+      show_coupons:false,
       handler: () => {
         onSuccess?.();
       },
