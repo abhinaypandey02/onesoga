@@ -66,13 +66,10 @@ export async function POST(req: NextRequest) {
     if (user) {
       const updates: Partial<{ phone: string; name: string; email: string; updatedAt: Date }> = {};
 
-      if (!user.phone && (payment.contact || shipping.contact)) {
-        updates.phone = payment.contact || shipping.contact;
+      if ((payment.contact)) {
+        updates.phone = payment.contact;
       }
-      if (!user.email && payment.email) {
-        updates.email = payment.email;
-      }
-      if (customerDetails.name && !user.name) {
+      if (customerDetails.name && !user.name && shipping.contact===payment.contact) {
         updates.name = customerDetails.name;
       }
 
