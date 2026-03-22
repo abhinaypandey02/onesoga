@@ -6,15 +6,19 @@ export const POST = async (req: NextRequest)=>{
     const response = {
         addresses:data.addresses.map((address:object)=>({
       ...address,
+      "serviceable": true,
+      "cod": false,
+      "cod_fee": 0,
+      "shipping_fee": 5000,
       "shipping_methods": [
         {
           "id": "1",
           "description": "BlueDart Shipping",
           "name": "Delivery within a week",
           "serviceable": true,
-          "shipping_fee": 5000, // in paise. Here 1000 = 1000 paise, which equals to ₹10
+          "shipping_fee": 5000,
           "cod": false,
-          "cod_fee": 0 // in paise. Here 1000 = 1000 paise, which equals to ₹10
+          "cod_fee": 0
         },
       ]
 }))
