@@ -9,7 +9,6 @@ async function getAccessToken(): Promise<string> {
     return cachedToken.accessToken;
   }
 
-  console.log("[Qikink] Fetching new access token...");
   const response = await fetch(`${QIKINK_BASE_URL}/token`, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -20,13 +19,10 @@ async function getAccessToken(): Promise<string> {
   });
 
   if (!response.ok) {
-    const text = await response.text();
-    console.error("[Qikink] Token fetch failed:", text);
     throw new Error(`Qikink auth error: ${response.status}`);
   }
 
   const result = await response.json();
-  console.log("[Qikink] Access token obtained, expires_in:", result.expires_in);
 
   cachedToken = {
     accessToken: result.Accesstoken,
