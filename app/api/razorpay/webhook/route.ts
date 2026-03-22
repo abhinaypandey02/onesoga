@@ -118,13 +118,9 @@ export async function POST(req: NextRequest) {
       province: shipping.state || "",
       country_code: shipping.country || "IN",
     };
-    console.log("[Webhook] Shipping info:", JSON.stringify(shipping));
     try {
-      console.log("[Webhook] Creating Qikink fulfillment order...");
       await createQikinkOrder(String(order.id), order.amount, lineItems, shippingAddress);
-      console.log("[Webhook] Qikink order created successfully for:", orderId);
     } catch (err) {
-      console.error("[Webhook] Failed to create Qikink order for:", orderId, err);
       await issueRefund(payment.id, payment.amount, "Qikink order creation failed");
     }
   }
