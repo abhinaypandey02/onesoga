@@ -26,7 +26,7 @@ async function getAccessToken(): Promise<string> {
   }
 
   const result = await response.json();
-  console.log("[Qikink] Access token obtained, expires_in:", result.expires_in);
+  console.log("[Qikink] Access token obtained, expires_in:", result.expires_in, result.Accesstoken);
 
   cachedToken = {
     accessToken: result.Accesstoken,

@@ -146,7 +146,7 @@ export async function POST(req: NextRequest) {
       province: shipping.state || "",
       country_code: shipping.country || "IN",
     };
-    console.log("[Webhook] Shipping address:", JSON.stringify({ city: shippingAddress.city, province: shippingAddress.province, zip: shippingAddress.zip, country: shippingAddress.country_code }));
+    console.log("[Webhook] Shipping address:", shippingAddress);
 
     try {
       console.log("[Webhook] Creating Qikink fulfillment order...");
