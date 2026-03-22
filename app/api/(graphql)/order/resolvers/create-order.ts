@@ -10,8 +10,6 @@ import { DELIVERY_FEE } from "@/lib/checkout/constants";
 class LineItem{
   @Field()
   skuId:string
-  @Field()
-  productId:string
   @Field({nullable:true, defaultValue: 1})
   quantity:number
 }
@@ -32,15 +30,12 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
   const razorpayLineItems: {sku: string; variant_id: string; price: number; offer_price: number; quantity: number; name: string}[] = [];
 
   for (const lineItem of data.lineItems) {
-    const product = products.find((p) => p.id === lineItem.productId);
+    const product = products.find((p) => p.variants.some((v) => v.sku === lineItem.skuId));
     if (!product) {
-      throw new Error(`Product not found: ${lineItem.productId}`);
+      throw new Error(`Product not found for SKU: ${lineItem.skuId}`);
     }
 
-    const variant = product.variants.find((v) => v.sku === lineItem.skuId);
-    if (!variant) {
-      throw new Error(`Variant not found: ${lineItem.skuId}`);
-    }
+    const variant = product.variants.find((v) => v.sku === lineItem.skuId)!;
 
     const priceInPaise = Math.round((variant.price ?? product.price) * 100);
     const costPriceInPaise = Math.round((variant.costPrice ?? product.costPrice) * 100);
