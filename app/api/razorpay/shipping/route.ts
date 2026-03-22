@@ -2,9 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 
 export const POST = async (req: NextRequest)=>{
     const data = await req.json()
-    console.log({
+    console.log(JSON.stringify({
         addresses:data.addresses.map((address:object)=>({
-      ...address,
       // @ts-expect-error -- test
       id:address.id,
       // @ts-expect-error -- test
@@ -23,10 +22,9 @@ export const POST = async (req: NextRequest)=>{
         },
       ]
 }))
-    })
+    }, null, 2))
     return NextResponse.json({
         addresses:data.addresses.map((address:object)=>({
-      ...address,
       // @ts-expect-error -- test
       id:address.id,
       // @ts-expect-error -- test
