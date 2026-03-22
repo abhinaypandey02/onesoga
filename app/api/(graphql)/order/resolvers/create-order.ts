@@ -40,7 +40,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
 
   let totalAmountInPaise = 0;
   const resolvedItems: {skuId: string; price: number; costPrice: number; quantity: number}[] = [];
-  const razorpayLineItems: {sku: string; variant_id: string; price: number; offer_price: number; quantity: number; name: string}[] = [];
+  const razorpayLineItems: {sku: string; variant_id: string; price: number; offer_price: number; quantity: number; name: string;description:string; image_url:string; product_url:string}[] = [];
 
   for (const lineItem of data.lineItems) {
     const product = products.find((p) => p.variants.some((v) => v.sku === lineItem.skuId));
@@ -61,6 +61,9 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
       offer_price: priceInPaise,
       quantity: lineItem.quantity,
       name: product.name,
+      description: product.description,
+      image_url: variant.image||product.image,
+      product_url: `${process.env.NEXT_PUBLIC_BASE_URL}/products/${product.id}/${variant.slug}`
     });
   }
 
@@ -69,7 +72,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     currency: "INR",
     receipt: `order_${Date.now()}`,
     line_items_total: totalAmountInPaise,
-
+    
     // @ts-expect-error -- documentation issue
     line_items: razorpayLineItems
   });
