@@ -53,6 +53,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
     amount: totalAmountInPaise,
     currency: "INR",
     receipt: `order_${Date.now()}`,
+    line_items_total: totalAmountInPaise,
   });
 
   const [newOrder] = await db.insert(OrderTable).values({
