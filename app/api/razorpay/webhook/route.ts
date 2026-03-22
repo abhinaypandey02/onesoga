@@ -67,8 +67,8 @@ export async function POST(req: NextRequest) {
     if (user) {
       const updates: Partial<{ phone: string; name: string; email: string; updatedAt: Date }> = {};
 
-      if (!user.phone && payment.contact) {
-        updates.phone = payment.contact;
+      if (!user.phone && (payment.contact || shipping.contact)) {
+        updates.phone = payment.contact || shipping.contact;
       }
       if (!user.email && payment.email) {
         updates.email = payment.email;
@@ -115,13 +115,14 @@ export async function POST(req: NextRequest) {
       last_name: lastName,
       address1: shipping.line1 || "",
       address2: shipping.line2 || "",
-      phone: payment.contact || shipping.contact || "",
+      phone: shipping.contact || "",
       email: customerDetails.email || payment.email || "",
       city: shipping.city || "",
       zip: shipping.zipcode || "",
       province: shipping.state || "",
       country_code: shipping.country || "IN",
     };
+    console.log("[Webhook] Shipping info:", JSON.stringify(shipping));
     try {
       console.log("[Webhook] Creating Qikink fulfillment order...");
       await createQikinkOrder(orderId, order.amount, lineItems, shippingAddress);
