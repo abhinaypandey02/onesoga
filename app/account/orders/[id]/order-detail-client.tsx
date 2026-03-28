@@ -13,7 +13,7 @@ type OrderData = QueryResponseType<typeof getOrder> & { status: FieldResponseTyp
 
 export default function OrderDetailClient({ data: order, loading }: { data?: OrderData; loading: boolean }) {
   const totalItems = order?.lineItems?.reduce((sum, li) => sum + li.quantity, 0) ?? 0;
-  const totalCharity = order?.lineItems?.reduce((sum, li) => sum + getCharity(li.price, li.costPrice) * li.quantity, 0) ?? 0;
+  const totalCharity = order?.lineItems?.reduce((sum, li) => sum + getCharity(li.price/100, li.costPrice/100) * li.quantity, 0) ?? 0;
 
   return (
     <div>
@@ -94,7 +94,7 @@ export default function OrderDetailClient({ data: order, loading }: { data?: Ord
         ) : (
           order.lineItems.map((li) => {
             const product = findProductBySku(li.skuId);
-            const charity = getCharity(li.price, li.costPrice) * li.quantity;
+            const charity = getCharity(li.price/100, li.costPrice/100) * li.quantity;
             const href = product.id ? `/products/${product.id}/${product.slug}` : undefined;
             return (
               <ProductLineItemCard
