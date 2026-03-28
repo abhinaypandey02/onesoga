@@ -8,7 +8,11 @@ import { createQikinkOrder } from "@/app/api/lib/qikink";
 import { eq } from "drizzle-orm";
 import products from "@/data/products";
 
-async function issueRefund(paymentId: string, amount: number, reason: string, orderId?: number) {
+async function markRefunded(orderUid: string) {
+  await db.update(OrderTable).set({ paid: false, updatedAt: new Date() }).where(eq(OrderTable.uid, orderUid));
+}
+
+async function issueRefund(paymentId: string, amount: number, reason: string, orderUid?: string) {
   try {
     console.log("[Webhook] Issuing refund for payment:", paymentId, "reason:", reason);
     await razorpay.payments.refund(paymentId, {
@@ -19,8 +23,8 @@ async function issueRefund(paymentId: string, amount: number, reason: string, or
   } catch (refundErr) {
     console.error("[Webhook] Failed to issue refund for:", paymentId, refundErr);
   }
-  if (orderId) {
-    await db.update(OrderTable).set({ paid: false, updatedAt: new Date() }).where(eq(OrderTable.id, orderId));
+  if (orderUid) {
+    await markRefunded(orderUid);
   }
 }
 
@@ -106,7 +110,7 @@ export async function POST(req: NextRequest) {
     });
 
     if (invalidItems.length > 0) {
-      await issueRefund(payment.id, payment.amount, `Invalid variant SKU: ${invalidItems.map((i) => i.skuId).join(", ")}`, order.id);
+      await issueRefund(payment.id, payment.amount, `Invalid variant SKU: ${invalidItems.map((i) => i.skuId).join(", ")}`, orderId);
       return NextResponse.json({ status: "refunded" });
     }
 
@@ -132,17 +136,13 @@ export async function POST(req: NextRequest) {
       await createQikinkOrder(String(order.id), order.amount, lineItems, shippingAddress);
     } catch (err) {
       console.error((err as Error).message)
-      await issueRefund(payment.id, payment.amount, "Qikink order creation failed", order.id);
+      await issueRefund(payment.id, payment.amount, "Qikink order creation failed", orderId);
     }
   }
 
   if (event.event === "payment.failed" || event.event === "payment.dispute.lost") {
     const payment = event.payload.payment.entity;
-    const orderId: string = payment.order_id;
-    await db
-      .update(OrderTable)
-      .set({ paid: false, updatedAt: new Date() })
-      .where(eq(OrderTable.uid, orderId));
+    await markRefunded(payment.order_id);
   }
 
   return NextResponse.json({ status: "ok" });
