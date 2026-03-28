@@ -140,5 +140,14 @@ export async function POST(req: NextRequest) {
       .where(and(eq(OrderTable.uid, orderId), isNull(OrderTable.paid)));
   }
 
+  if (event.event === "payment.dispute.lost") {
+    const payment = event.payload.payment.entity;
+    const orderId: string = payment.order_id;
+    await db
+      .update(OrderTable)
+      .set({ paid: false, updatedAt: new Date() })
+      .where(eq(OrderTable.uid, orderId));
+  }
+
   return NextResponse.json({ status: "ok" });
 }
