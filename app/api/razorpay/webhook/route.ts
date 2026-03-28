@@ -38,14 +38,12 @@ export async function POST(req: NextRequest) {
   }
 
   const event = JSON.parse(body);
+  console.log("[Webhook] Received event:", event.event);
 
   if (event.event === "order.paid") {
-    console.log("[Webhook] order.paid payload:", JSON.stringify(event, null, 2));
-  }
-
-  if (event.event === "payment.captured") {
     const payment = event.payload.payment.entity;
-    const orderId: string = payment.order_id;
+    const razorpayOrder = event.payload.order.entity;
+    const orderId: string = razorpayOrder.id;
     const [order] = await db
       .update(OrderTable)
       .set({ paid: true, updatedAt: new Date() })
@@ -59,11 +57,9 @@ export async function POST(req: NextRequest) {
       await db.update(OrderTable).set({ paid: false, updatedAt: new Date() }).where(eq(OrderTable.id, order.id));
     };
 
-    // Fetch Razorpay order details (populated by Magic Checkout)
-    // eslint-disable-next-line
-    const razorpayOrder = await razorpay.orders.fetch(orderId) as any;
     const customerDetails = razorpayOrder.customer_details || {};
     const shipping = customerDetails.shipping_address || {};
+
     // Update user details from payment info if missing
     const [user] = await db
       .select()
@@ -76,8 +72,8 @@ export async function POST(req: NextRequest) {
       if ((payment.contact)) {
         updates.phone = payment.contact;
       }
-      if (customerDetails.name && !user.name && shipping.contact===payment.contact) {
-        updates.name = customerDetails.name;
+      if (shipping.name && !user.name && shipping.contact===payment.contact) {
+        updates.name = shipping.name;
       }
 
       if (Object.keys(updates).length > 0) {
@@ -108,8 +104,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ status: "refunded" });
     }
 
-    // Build shipping address from Razorpay order details
-    const customerName = shipping.name || customerDetails.name || "";
+    // Build shipping address from order payload
+    const customerName = shipping.name || "";
     const nameParts = customerName.trim().split(" ");
     const firstName = nameParts[0] || "";
     const lastName = nameParts.slice(1).join(" ") || "";
