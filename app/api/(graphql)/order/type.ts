@@ -19,7 +19,7 @@ export class OrderGQL {
   @Field()
   id: number;
   @Field()
-  uid: string;
+  razorpayId: string;
   @Field()
   amount: number;
   @Field(() => Boolean, { nullable: true })

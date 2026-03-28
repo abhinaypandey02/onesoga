@@ -12,7 +12,8 @@ import {UserTable} from "@/app/api/(graphql)/user/db";
 
 export const OrderTable = pgTable("orders", {
   id: serial("id").primaryKey(),
-  uid: text("uid").notNull(),
+  razorpayId: text("razorpay_id").notNull(),
+  qikinkId: integer("qikink_id"),
   userId: integer("user_id").notNull().references(() => UserTable.id),
   amount: real("amount").notNull(),
   paid: boolean("paid"),

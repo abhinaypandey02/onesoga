@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 import products from "@/data/products";
 
 async function markRefunded(orderUid: string) {
-  await db.update(OrderTable).set({ paid: false, updatedAt: new Date() }).where(eq(OrderTable.uid, orderUid));
+  await db.update(OrderTable).set({ paid: false, updatedAt: new Date() }).where(eq(OrderTable.razorpayId, orderUid));
 }
 
 async function issueRefund(paymentId: string, amount: number, reason: string, orderUid?: string) {
@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
     const [order] = await db
       .select()
       .from(OrderTable)
-      .where(eq(OrderTable.uid, orderId));
+      .where(eq(OrderTable.razorpayId, orderId));
 
     if (!order) {
       await issueRefund(payment.id, payment.amount, `Order not found: ${orderId}`);
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
       country_code: shipping.country?.toUpperCase() || "IN",
     };
     try {
-      await createQikinkOrder(String(order.id), order.amount, lineItems, shippingAddress);
+      await createQikinkOrder(order.id, order.amount, lineItems, shippingAddress);
     } catch (err) {
       console.error((err as Error).message)
       await issueRefund(payment.id, payment.amount, "Qikink order creation failed", orderId);

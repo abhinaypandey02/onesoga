@@ -81,7 +81,7 @@ export default resolver(async (ctx, data:CheckoutInput)=>{
 
   const [newOrder] = await db.insert(OrderTable).values({
   // @ts-expect-error -- documentation issue
-    uid:order.id,
+    razorpayId:order.id,
     userId:ctx.userId,
     amount:totalAmountInPaise
   }).returning({id:OrderTable.id})

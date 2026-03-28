@@ -262,7 +262,7 @@ type Order {
   lineItems: [OrderLineItem!]!
   paid: Boolean
   status: String!
-  uid: String!
+  razorpayId: String!
 }
 
 type OrderLineItem {

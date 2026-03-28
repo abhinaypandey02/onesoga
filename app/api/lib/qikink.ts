@@ -1,4 +1,7 @@
 import {OrderDB} from "@/app/api/(graphql)/order/db";
+import { OrderTable } from "../(graphql)/order/db";
+import { eq } from "drizzle-orm";
+import { db } from "./db";
 
 const QIKINK_BASE_URL = "https://api.qikink.com/api";
 
@@ -83,7 +86,7 @@ export type QikinkOrderResponse = {
 };
 
 export async function createQikinkOrder(
-  orderId: string,
+  orderId: number,
   amount: number,
   lineItems: { skuId: string; quantity: number; price: number }[],
   shippingAddress: QikinkShippingAddress
@@ -92,7 +95,7 @@ export async function createQikinkOrder(
     method: "POST",
     headers: await getHeaders(),
     body: JSON.stringify({
-      order_number: orderId,
+      order_number: String(orderId),
       qikink_shipping: "1",
       gateway: "Prepaid",
       total_order_value: String(amount / 100),
@@ -112,12 +115,15 @@ export async function createQikinkOrder(
     throw new Error(`Qikink API error: ${response.status}`);
   }
 
-  const result = await response.json();
+  const result = (await response.json()) as {order_id: number};
+  await db.update(OrderTable).set({
+      qikinkId: result.order_id
+    }).where(eq(OrderTable.id, orderId))
   console.log("Qikink order created:", result);
   return result;
 }
 
-export async function getQikinkOrder(orderId: string): Promise<QikinkOrderResponse | null> {
+export async function getQikinkOrder(orderId: number): Promise<QikinkOrderResponse | null> {
   const response = await fetch(`${QIKINK_BASE_URL}/order?id=${encodeURIComponent(orderId)}`, {
     method: "GET",
     headers: await getHeaders(),
