@@ -8,6 +8,7 @@ import { useCart } from "@/lib/cart/cart-context";
 import { useCheckout } from "@/lib/checkout/use-checkout";
 import products from "@/data/products";
 import AuthModal from "@/app/components/auth-modal";
+import CharityCallout from "@/app/components/charity-callout";
 import { Trash } from "@phosphor-icons/react";
 
 function getProductInfo(skuId: string) {
@@ -156,23 +157,9 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {totalCharity > 0 && (
-        <div className="mt-4 border-2 border-[var(--accent)] bg-[var(--accent)]/5 p-4 sm:p-5">
-          <div className="flex items-center gap-3">
-            <div className="h-[3px] w-6 bg-[var(--accent)]" />
-            <span className="font-[family-name:var(--font-body)] text-[10px] font-semibold uppercase tracking-[0.3em] text-[var(--accent)] sm:text-xs">
-              Movement Impact
-            </span>
-          </div>
-          <p className="mt-2 font-[family-name:var(--font-body)] text-sm text-[var(--muted)]">
-            This order contributes{" "}
-            <span className="font-bold text-[var(--accent)]">
-              &#8377;{totalCharity.toFixed(2)}
-            </span>{" "}
-            to charity.
-          </p>
-        </div>
-      )}
+      <div className="mt-4">
+        <CharityCallout amount={totalCharity} />
+      </div>
 
       <button
         onClick={handleCheckout}

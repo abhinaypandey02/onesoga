@@ -276,6 +276,7 @@ export default function ProductDetails({ product, variant }: {
           productName={product.name}
           skuId={matchedVariant.sku}
           amount={displayPrice}
+          costPrice={costPrice}
           quantity={quantity}
           onClose={() => setShowCheckout(false)}
         />
