@@ -24,7 +24,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.3,
     },
     {
-      url: `${BASE_URL}/terms`,
+      url: `${BASE_URL}/terms-conditions`,
       changeFrequency: "yearly" as const,
       priority: 0.3,
     },
