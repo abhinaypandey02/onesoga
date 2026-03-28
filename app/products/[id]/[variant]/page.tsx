@@ -41,6 +41,9 @@ export default async function ProductPage({
   }
 
   const selectedVariant = product.variants.find((v) => v.slug === variant);
+  if (!selectedVariant) {
+    notFound();
+  }
   const jsonLd = getProductJsonLd(product, selectedVariant);
 
   return (
