@@ -5,7 +5,7 @@ import { OrderTable, LineItemTable } from "@/app/api/(graphql)/order/db";
 import { UserTable } from "@/app/api/(graphql)/user/db";
 import { razorpay } from "@/app/api/lib/razorpay";
 import { createQikinkOrder } from "@/app/api/lib/qikink";
-import { eq } from "drizzle-orm";
+import { eq, and, or, isNull } from "drizzle-orm";
 import products from "@/data/products";
 
 async function issueRefund(paymentId: string, amount: number, reason: string) {
@@ -39,17 +39,20 @@ export async function POST(req: NextRequest) {
 
   const event = JSON.parse(body);
 
+  if (event.event === "order.paid") {
+    console.log("[Webhook] order.paid payload:", JSON.stringify(event, null, 2));
+  }
+
   if (event.event === "payment.captured") {
     const payment = event.payload.payment.entity;
     const orderId: string = payment.order_id;
     const [order] = await db
       .update(OrderTable)
       .set({ paid: true, updatedAt: new Date() })
-      .where(eq(OrderTable.uid, orderId)).returning();
+      .where(and(eq(OrderTable.uid, orderId), or(isNull(OrderTable.paid), eq(OrderTable.paid, false)))).returning();
 
     if (!order) {
-      await issueRefund(payment.id, payment.amount, `Order not found: ${orderId}`);
-      return NextResponse.json({ status: "refunded" });
+      return NextResponse.json({ status: "ignored" });
     }
 
     const markRefunded = async () => {
@@ -130,6 +133,15 @@ export async function POST(req: NextRequest) {
       await issueRefund(payment.id, payment.amount, "Qikink order creation failed");
       await markRefunded();
     }
+  }
+
+  if (event.event === "payment.failed" || event.event === "payment.dispute.lost") {
+    const payment = event.payload.payment.entity;
+    const orderId: string = payment.order_id;
+    await db
+      .update(OrderTable)
+      .set({ paid: false, updatedAt: new Date() })
+      .where(eq(OrderTable.uid, orderId));
   }
 
   return NextResponse.json({ status: "ok" });
