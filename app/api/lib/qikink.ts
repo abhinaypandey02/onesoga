@@ -135,5 +135,5 @@ export async function getQikinkOrder(orderId: string): Promise<QikinkOrderRespon
   }
 
   const result = await response.json();
-  return result;
+  return result?.[0];
 }
