@@ -18,6 +18,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "daily",
       priority: 1,
     },
+    {
+      url: `${BASE_URL}/return-policy`,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
     ...productPages,
   ];
 }
