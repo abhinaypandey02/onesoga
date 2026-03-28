@@ -6,6 +6,7 @@ import ProductDetails from "./product-details";
 import YouMayAlsoLike from "@/app/components/you-may-also-like";
 import { getSEO } from "@/lib/seo";
 import { Metadata } from "next";
+import { getProductJsonLd } from "./utils";
 
 export function generateStaticParams() {
   return products.flatMap((product) => (product.variants.map(p=>({
@@ -40,25 +41,7 @@ export default async function ProductPage({
   }
 
   const selectedVariant = product.variants.find((v) => v.slug === variant);
-  const price = selectedVariant?.price ?? product.price;
-  const image = selectedVariant?.image ?? product.image;
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
-
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: `${product.name}${selectedVariant ? ` — ${selectedVariant.options.map((o) => o.value).join(", ")}` : ""}`,
-    description: product.description,
-    image,
-    url: `${baseUrl}/products/${product.id}/${selectedVariant?.slug ?? ""}`,
-    offers: {
-      "@type": "Offer",
-      price: price.toFixed(2),
-      priceCurrency: "INR",
-      availability: "https://schema.org/InStock",
-      url: `${baseUrl}/products/${product.id}/${selectedVariant?.slug ?? ""}`,
-    },
-  };
+  const jsonLd = getProductJsonLd(product, selectedVariant);
 
   return (
     <>
