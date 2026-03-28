@@ -116,13 +116,12 @@ export async function POST(req: NextRequest) {
       city: shipping.city || "",
       zip: shipping.zipcode || "",
       province: shipping.state || "",
-      country_code: shipping.country || "IN",
+      country_code: shipping.country?.toUpperCase() || "IN",
     };
     try {
       await createQikinkOrder(String(order.id), order.amount, lineItems, shippingAddress);
     } catch (err) {
-      // @ts-expect-error -- documentation issue
-      console.error(err.message)
+      console.error((err as Error).message)
       await issueRefund(payment.id, payment.amount, "Qikink order creation failed");
     }
   }
