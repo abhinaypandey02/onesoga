@@ -8,6 +8,7 @@ import { useCheckout } from "@/lib/checkout/use-checkout";
 import products from "@/data/products";
 import AuthModal from "@/app/components/auth-modal";
 import CharityCallout from "@/app/components/charity-callout";
+import { getCharity } from "@/lib/checkout/constants";
 import ProductLineItemCard from "@/app/components/product-line-item-card";
 import { Trash } from "@phosphor-icons/react";
 
@@ -41,7 +42,7 @@ export default function CheckoutPage() {
     0
   );
   const totalCharity = lineItems.reduce(
-    (sum, item) => sum + ((item.info!.price - item.info!.costPrice) * item.quantity),
+    (sum, item) => sum + (getCharity(item.info!.price, item.info!.costPrice) * item.quantity),
     0
   );
 

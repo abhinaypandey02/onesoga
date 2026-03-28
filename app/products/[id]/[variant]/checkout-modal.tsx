@@ -6,6 +6,7 @@ import Modal from "../../../components/modal";
 import AuthModal from "../../../components/auth-modal";
 import { useCheckout } from "@/lib/checkout/use-checkout";
 import CharityCallout from "@/app/components/charity-callout";
+import { getCharity } from "@/lib/checkout/constants";
 
 type CheckoutModalProps = {
   productName: string;
@@ -21,7 +22,7 @@ export default function CheckoutModal({ productName, skuId, amount, costPrice, q
   const [showAuth, setShowAuth] = useState(!token);
 
   const total = amount * quantity;
-  const totalCharity = (amount - costPrice) * quantity;
+  const totalCharity = getCharity(amount, costPrice) * quantity;
 
   const { checkout, loading } = useCheckout(onClose);
 
