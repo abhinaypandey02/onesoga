@@ -7,12 +7,13 @@ import type statusField from "@/app/api/(graphql)/order/resolvers/status-field";
 import {formatPrice, findProductBySku} from "../utils";
 import CharityCallout from "@/app/components/charity-callout";
 import ProductLineItemCard from "@/app/components/product-line-item-card";
+import { GATEWAY_FEE_PERCENT } from "@/lib/checkout/constants";
 
 type OrderData = QueryResponseType<typeof getOrder> & { status: FieldResponseType<typeof statusField> };
 
 export default function OrderDetailClient({ data: order, loading }: { data?: OrderData; loading: boolean }) {
   const totalItems = order?.lineItems?.reduce((sum, li) => sum + li.quantity, 0) ?? 0;
-  const totalCharity = order?.lineItems?.reduce((sum, li) => sum + (li.price - li.costPrice) * li.quantity, 0) ?? 0;
+  const totalCharity = (order?.lineItems?.reduce((sum, li) => sum + (li.price - li.costPrice) * li.quantity, 0) ?? 0) * (1 - GATEWAY_FEE_PERCENT / 100);
 
   return (
     <div>
@@ -93,7 +94,7 @@ export default function OrderDetailClient({ data: order, loading }: { data?: Ord
         ) : (
           order.lineItems.map((li) => {
             const product = findProductBySku(li.skuId);
-            const charity = (li.price - li.costPrice) * li.quantity;
+            const charity = (li.price - li.costPrice) * li.quantity * (1 - GATEWAY_FEE_PERCENT / 100);
             const href = product.id ? `/products/${product.id}/${product.slug}` : undefined;
             return (
               <ProductLineItemCard
