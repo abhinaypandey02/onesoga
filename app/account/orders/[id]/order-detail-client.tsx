@@ -104,7 +104,7 @@ export default function OrderDetailClient({ data: order, loading }: { data?: Ord
                 quantity={li.quantity}
                 optionLabel={product.optionLabel}
                 totalPrice={formatPrice(li.price * li.quantity)}
-                charityText={charity > 0 ? `${formatPrice(charity)} to charity` : undefined}
+                charityText={charity > 0 ? `₹${charity} to charity` : undefined}
                 href={href}
               />
             );
@@ -130,7 +130,7 @@ export default function OrderDetailClient({ data: order, loading }: { data?: Ord
 
       {!loading && (
         <div className="mt-4">
-          <CharityCallout amount={totalCharity / 100} past />
+          <CharityCallout amount={totalCharity} past />
         </div>
       )}
     </div>
