@@ -131,16 +131,7 @@ export async function POST(req: NextRequest) {
     }
   }
 
-  if (event.event === "payment.failed") {
-    const payment = event.payload.payment.entity;
-    const orderId: string = payment.order_id;
-    await db
-      .update(OrderTable)
-      .set({ paid: false, updatedAt: new Date() })
-      .where(and(eq(OrderTable.uid, orderId), or(isNull(OrderTable.paid), eq(OrderTable.paid, false))));
-  }
-
-  if (event.event === "payment.dispute.lost") {
+  if (event.event === "payment.failed" || event.event === "payment.dispute.lost") {
     const payment = event.payload.payment.entity;
     const orderId: string = payment.order_id;
     await db
