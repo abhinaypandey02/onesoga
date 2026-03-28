@@ -22,7 +22,7 @@ export function mapToProduct(product: ProductListItem, details: FetchProductResp
     description: "",
     price: Number(product.price_range.split(" - ")[0]) + DELIVERY_FEE,
     image: `${imageBase}${details.variants[0]?.variant_image ?? details.default_image}`,
-    costPrice: details.product_price,
+    costPrice: details.product_price + DELIVERY_FEE,
     optionTypes: details.options.map(o => o as OptionType),
     variants: details.variants.map(v => {
       const options: {type: OptionType; value: string}[] = [];
@@ -34,7 +34,7 @@ export function mapToProduct(product: ProductListItem, details: FetchProductResp
         options,
         price: Number(v.product_price) + DELIVERY_FEE,
         image: `${imageBase}${v.variant_image}`,
-        costPrice: v.updated_base_price,
+        costPrice: v.updated_base_price + DELIVERY_FEE,
         sizeChartLink: details.size_chart_link ?? undefined,
       };
     }),
