@@ -39,6 +39,10 @@ export async function POST(req: NextRequest) {
 
   const event = JSON.parse(body);
 
+  if (event.event === "order.paid") {
+    console.log("[Webhook] order.paid payload:", JSON.stringify(event, null, 2));
+  }
+
   if (event.event === "payment.captured") {
     const payment = event.payload.payment.entity;
     const orderId: string = payment.order_id;
