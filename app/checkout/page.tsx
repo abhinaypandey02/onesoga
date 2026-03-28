@@ -42,9 +42,9 @@ export default function CheckoutPage() {
     0
   );
   const totalCharity = lineItems.reduce(
-    (sum, item) => sum + ((item.info!.price - item.info!.costPrice) * item.quantity),
+    (sum, item) => sum + ((item.info!.price - item.info!.costPrice - (GATEWAY_FEE_PERCENT / 100) * item.info!.price) * item.quantity),
     0
-  ) * (1 - GATEWAY_FEE_PERCENT / 100);
+  );
 
   const handleCheckout = async () => {
     if (!token) {

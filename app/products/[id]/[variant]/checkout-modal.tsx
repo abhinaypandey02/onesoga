@@ -22,7 +22,7 @@ export default function CheckoutModal({ productName, skuId, amount, costPrice, q
   const [showAuth, setShowAuth] = useState(!token);
 
   const total = amount * quantity;
-  const totalCharity = (amount - costPrice) * quantity * (1 - GATEWAY_FEE_PERCENT / 100);
+  const totalCharity = (amount - costPrice - (GATEWAY_FEE_PERCENT / 100) * amount) * quantity;
 
   const { checkout, loading } = useCheckout(onClose);
 

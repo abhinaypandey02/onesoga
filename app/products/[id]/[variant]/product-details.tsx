@@ -101,7 +101,7 @@ export default function ProductDetails({ product, variant }: {
   const displayImage = matchedVariant?.image ?? product.image;
   const costPrice = matchedVariant?.costPrice ?? product.costPrice;
   const sizeChartLink = matchedVariant?.sizeChartLink;
-  const profit = (displayPrice - costPrice) * (1 - GATEWAY_FEE_PERCENT / 100);
+  const profit = displayPrice - costPrice - (GATEWAY_FEE_PERCENT / 100) * displayPrice;
 
   const featuredVariants = useMemo(
     () => product.variants.filter((v) => v.featured && v.image),
