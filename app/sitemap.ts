@@ -23,6 +23,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "yearly" as const,
       priority: 0.3,
     },
+    {
+      url: `${BASE_URL}/terms`,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
+    {
+      url: `${BASE_URL}/privacy`,
+      changeFrequency: "yearly" as const,
+      priority: 0.3,
+    },
     ...productPages,
   ];
 }
